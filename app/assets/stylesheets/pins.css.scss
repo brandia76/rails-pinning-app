@@ -22,3 +22,7 @@ h1 {
 hr{
   clear:both;
 }
+body {
+	background: url(asset-path('laptop-background.jpg')) no-repeat;
+	background-size: 100%;
+}

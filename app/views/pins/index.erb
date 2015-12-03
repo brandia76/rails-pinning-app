@@ -9,15 +9,20 @@
       <% row.each do |pin| %>      
         <div class="pin-container col-md-4">
           <div class="pin">
-            <div class="pin-header">
-              <h4>
-                <a href="<%= pin_path(pin) %>">
-                  <%= "#{pin.title}" %>
-                </a>
-              </h4>
-              <a class="url" href="<%= "#{pin.url}" %>">
-                <%= "#{pin.url}" %>
-              </a>
+            <div class="pin-header row">
+			  <div class="logo-thumbnail col-xs-3">
+				<%= image_tag("#{pin.resource_type}-logo-thumbnail.png") %>
+			  </div>
+			  <div class+"col-xs-9">
+				  <h4>
+					<a href="<%= pin_path(pin) %>">
+					  <%= "#{pin.title}" %>
+					</a>
+				  </h4>
+				  <a class="url" href="<%= "#{pin.url}" %>">
+					<%= "#{pin.url}" %>
+				  </a>
+			  </div>
             </div>
             <hr/>
             <p class="text"><%= "#{pin.text}" %></p>
