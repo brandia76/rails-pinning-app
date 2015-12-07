@@ -11,11 +11,11 @@
           <div class="pin">
             <div class="pin-header row">
 			  <div class="logo-thumbnail col-xs-3">
-				<%= image_tag("#{pin.resource_type}-logo-thumbnail.png") %>
+				<%= image_tag("#{pin.category.name}-logo-thumbnail.png") %>
 			  </div>
 			  <div class+"col-xs-9">
 				  <h4>
-					<%= link_to "#{pin.title}", pin_by_name_path(slug: pin.slug), html_options = {target: "_blank"} %>
+					<%= link_to "#{pin.title}", pin_by_name_path(slug: pin.slug) %>
 				  </h4>
 				  <%= link_to "#{pin.url}", pin.url, html_options = {target: "_blank"} %>
 			  </div>
@@ -23,7 +23,7 @@
             <hr/>
             <p class="text"><%= "#{pin.text}" %></p>
 			<p class="text"><%= "#{pin.slug}" %></p>
-			<p class="text"><%= "#{pin.resource_type}" %></p>
+			<p class="text"><%= "#{pin.category.name}" %></p>
           </div>
         </div>
       <% end %>
