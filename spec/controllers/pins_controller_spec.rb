@@ -15,4 +15,5 @@ RSpec.describe PinsController do
     
   end
 
+
 end

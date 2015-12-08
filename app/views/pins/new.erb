@@ -1,5 +1,14 @@
-<h1>Hello World</h1>
-
+<h1>Create a new pin</h1>
+<% unless @errors.blank? %>
+	<div class="error">
+		<label><%= pluralize(@errors.count, "error") %> prohibited this pin from being saved:</label>
+		<ul>
+			<% @errors.each do |msg| %>
+					<li><%= "#{msg}" %> </li>
+			<% end %>
+		</ul>
+	</div>
+<% end %>
 <%= form_for(@pin, html: {class: "form-horizonal"}) do |f| %>
 	<div class="form-group">
 		<label for="pin_title" class="col-sm-2 control-label">Title</label>
