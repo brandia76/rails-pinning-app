@@ -18,6 +18,7 @@ gem 'coffee-script-source', '1.8.0'
 gem 'rails_12factor'
 gem 'rspec'
 gem 'rspec-rails'
+gem 'paperclip'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
@@ -48,5 +49,4 @@ group :development, :test do
   gem 'database_cleaner'
 end
 
-gem 'rspec'
-gem 'rspec-rails'
+
