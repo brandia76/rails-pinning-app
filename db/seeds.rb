@@ -18,7 +18,7 @@ Pin.create(
   image_file_name: "",
   image_content_type: "",
   image_file_size: "",
-  image_updated_at: ""))
+  image_updated_at: "")
 Pin.create(
   title: 'Try Ruby', 
   url: 'http://tryruby.org/', 
@@ -29,7 +29,7 @@ Pin.create(
   image_file_name: "",
   image_content_type: "",
   image_file_size: "",
-  image_updated_at: ""))
+  image_updated_at: "")
 Pin.create(
   title: 'Ruby Quiz', 
   url: 'http://rubyquiz.org', 
@@ -39,7 +39,7 @@ Pin.create(
   image_file_name: "",
   image_content_type: "",
   image_file_size: "",
-  image_updated_at: ""))
+  image_updated_at: "")
 Pin.create(
   title: 'Ruby on Rails for Developers', 
   url: 'https://github.com/generalassembly/ga-ruby-on-rails-for-devs', 
@@ -50,7 +50,7 @@ Pin.create(
   image_file_name: "",
   image_content_type: "",
   image_file_size: "",
-  image_updated_at: ""))
+  image_updated_at: "")
 Pin.create(
   title: 'Ruby Monk', 
   url: 'http://rubymonk.com', 
@@ -61,7 +61,7 @@ Pin.create(
   image_file_name: "",
   image_content_type: "",
   image_file_size: "",
-  image_updated_at: ""))
+  image_updated_at: "")
 Category.create(
   name: "ruby"
 )
