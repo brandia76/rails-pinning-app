@@ -42,6 +42,11 @@ class PinsController < ApplicationController
     end
   end
   
+  def destroy
+    Pin.find(params[:id]).destroy
+    redirect_to action: "index"
+  end
+  
   private
   def pin_params
     params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image)
