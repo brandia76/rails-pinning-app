@@ -39,6 +39,9 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
   
+  Paperclip.options[:command_path] = 'C:\Program Files (x86)\GnuWin32\bin'
+  Paperclip.options[:command_path] = 'C:\Program Files\ImageMagick-6.8.8-Q16'
+  
   config.paperclip_defaults = {
     :storage => :s3,
     :s3_credentials => {

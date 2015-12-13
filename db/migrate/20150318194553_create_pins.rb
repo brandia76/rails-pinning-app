@@ -5,7 +5,6 @@ class CreatePins < ActiveRecord::Migration
       t.string :url
       t.text :text
       t.string :slug
-      t.integer :category_id
     end
   end
 end
