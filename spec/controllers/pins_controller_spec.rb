@@ -39,7 +39,8 @@ RSpec.describe PinsController do
         url: "http://railswizard.org", 
         slug: "rails-wizard", 
         text: "A fun and helpful Rails Resource",
-        category_id: 2
+        category_id: 2,
+        image: fixture_file_upload('app\assets\images\rails-logo-thumbnail.png')
         }    
     end
     
@@ -52,7 +53,7 @@ RSpec.describe PinsController do
     
     it 'responds with a redirect' do
       post :create, pin: @pin_hash
-      expect(response.redirect?).to be(true)
+      expect(response).to redirect_to(pin_url(assigns(:pin)))
     end
     
     it 'creates a pin' do

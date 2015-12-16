@@ -11,7 +11,11 @@
           <div class="pin">
             <div class="pin-header row">
 			  <div class="logo-thumbnail col-xs-3">
-				<%= image_tag("#{pin.category.name}-logo-thumbnail.png") %>
+					<% if pin.image? %>
+						<%= image_tag("#{pin.image.url(:thumb)}") %>
+					<% else %>
+						<%= image_tag("#{pin.category.name}-logo-thumbnail.png") %>
+					<% end %>
 			  </div>
 			  <div class+"col-xs-9">
 				  <h4>

@@ -20,15 +20,28 @@ require 'spec_helper'
 
 RSpec.describe UsersController, type: :controller do
 
-  # This should return the minimal set of attributes required to create a valid
-  # User. As you add validations to User, be sure to
-  # adjust the attributes here as well.
+  before(:each) do  
+    @user = FactoryGirl.build(:user)
+  end
+  
+  after(:each) do
+    @user.destroy
+  end
+  
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      first_name: @user.first_name,
+      last_name: @user.last_name,
+      email: @user.email,
+      password: @user.password
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      first_name: "",
+      password: @user.password
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -36,13 +49,6 @@ RSpec.describe UsersController, type: :controller do
   # UsersController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all users as @users" do
-      user = User.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:users)).to eq([user])
-    end
-  end
 
   describe "GET #show" do
     it "assigns the requested user as @user" do
@@ -103,14 +109,14 @@ RSpec.describe UsersController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {first_name: "Sally"}
       }
 
       it "updates the requested user" do
         user = User.create! valid_attributes
         put :update, {:id => user.to_param, :user => new_attributes}, valid_session
         user.reload
-        skip("Add assertions for updated state")
+
       end
 
       it "assigns the requested user as @user" do
@@ -135,7 +141,7 @@ RSpec.describe UsersController, type: :controller do
 
       it "re-renders the 'edit' template" do
         user = User.create! valid_attributes
-        put :update, {:id => user.to_param, :user => invalid_attributes}, valid_session
+        put :update, {:id => user.to_param, :user => invalid_attributes}, valid_session 
         expect(response).to render_template("edit")
       end
     end
@@ -156,4 +162,37 @@ RSpec.describe UsersController, type: :controller do
     end
   end
 
+  describe "GET login" do
+    it "renders the login view" do
+      get 'login'
+      expect(response).to render_template(:login)
+    end
+  end
+   
+  describe "POST login" do
+   
+    it "renders the show view if params valid" do
+      user = User.create! valid_attributes
+      post :authenticate, {:email => user.email, :password => user.password} 
+      expect(response).to redirect_to(user_path(user.id))
+    end
+   
+    it "populates @user if params valid" do 
+      user = User.create! valid_attributes
+      post :authenticate, {:email => user.email, :password => user.password} 
+      expect(assigns(:user)).to eq(user)
+    end
+   
+    it "renders the login view if params invalid" do
+      user = User.create! valid_attributes
+      post :authenticate, {:email => "", :password => ""} 
+      expect(response).to render_template(:login)   
+    end
+   
+    it "populates the @errors variable if params invalid" do
+      user = User.create! valid_attributes
+      post :authenticate, {:email => "", :password => ""} 
+      expect(assigns[:errors].present?).to be(true)
+    end
+  end
 end

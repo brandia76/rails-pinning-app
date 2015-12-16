@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :users
+  resources :users, except: [:index]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
@@ -13,7 +13,12 @@ Rails.application.routes.draw do
   
   get '/library' => 'pins#index'
   
-
+  get 'signup' => "users#new", as: :signup
+  
+  get '/login' => "users#login"
+  post '/login' => "users#authenticate"
+  
+  get "users/email-:email" => "users#show_by_email", as: 'user_by_email'
     
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

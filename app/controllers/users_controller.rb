@@ -10,8 +10,13 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @user = User.find(params[:id])
   end
-
+  
+  def show_by_email
+    @user = User.find_by_email(params[:email])
+  end
+  
   # GET /users/new
   def new
     @user = User.new
@@ -19,6 +24,20 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+  end
+  
+  def login
+  end
+  
+  # GET /users/login
+  def authenticate
+    @user = User.authenticate(params[:email], params[:password])
+    if @user
+      redirect_to user_path(@user.id)
+    else
+      @errors = ["Invalid email or password"] #@user.errors.full_messages 
+      render :login
+    end
   end
 
   # POST /users

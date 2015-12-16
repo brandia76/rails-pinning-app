@@ -6,7 +6,11 @@
 </div>
 
 <div class="show-pin">
-  <img src="<%= @pin.image.url(:medium) %>">
+	<% if @pin.image? %>
+		<%= image_tag("#{@pin.image.url(:medium)}") %>
+	<% else %>
+		<%= image_tag("#{@pin.category.name}-logo-thumbnail.png") %>
+	<% end %>
   <p><%= "#{@pin.text}" %></p>
 
   <hr/>
