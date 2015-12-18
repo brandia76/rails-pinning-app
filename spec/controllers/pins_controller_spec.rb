@@ -1,5 +1,15 @@
 require 'spec_helper'
 RSpec.describe PinsController do
+  before(:each) do
+    @user = FactoryGirl.create(:user)
+    login(@user)
+  end
+  
+  after(:each) do
+    if !@user.destroyed?
+      @user.destroy
+    end
+  end
   
   describe "GET index" do
   
@@ -10,7 +20,7 @@ RSpec.describe PinsController do
     
     it 'populates @pins with all pins' do
       get :index
-      expect(assigns[:pins]).to eq(Pin.all)
+      expect(assigns[:pins]).to eq(Pin.where(user_id: @user.id))
     end
     
   end
@@ -39,8 +49,7 @@ RSpec.describe PinsController do
         url: "http://railswizard.org", 
         slug: "rails-wizard", 
         text: "A fun and helpful Rails Resource",
-        category_id: 2,
-        image: fixture_file_upload('app\assets\images\rails-logo-thumbnail.png')
+        category_id: 2
         }    
     end
     
@@ -53,7 +62,7 @@ RSpec.describe PinsController do
     
     it 'responds with a redirect' do
       post :create, pin: @pin_hash
-      expect(response).to redirect_to(pin_url(assigns(:pin)))
+      expect(response.redirect?).to be(true)
     end
     
     it 'creates a pin' do

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
   post '/login' => "users#authenticate"
   
   get "users/email-:email" => "users#show_by_email", as: 'user_by_email'
+  delete 'logout/:id' => "users#logout", as: :logout
     
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
