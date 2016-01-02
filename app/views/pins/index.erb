@@ -28,7 +28,10 @@
             <p class="text"><%= "#{pin.text}" %></p>
 			<p class="link"><%= link_to "Edit", edit_pin_path(pin) %></p>
 			<p class="link"><%= link_to "Delete", pin, method: :delete %></p>
-			<p class="text"><%= "#{pin.slug} #{pin.category.name} #{pin.id}" %></p>
+			<%= link_to repin_path(pin), class: "btn btn-default", method: "post" do %>
+				<i class="fa fa-thumb-tack"></i>
+				Repin!
+			<% end %>
           </div>
         </div>
       <% end %>

@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<p>
+<!-- <p>
   <strong>First name:</strong>
   <%= @user.first_name %>
 </p>
@@ -21,4 +21,47 @@
 </p>
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= link_to 'Back', users_path %> -->
+
+<div class="header">
+  <h1><%= "#{@user.first_name}'s Pins" %></h1>
+</div>
+<hr/>
+<% unless @pins.empty? %>
+	<div class="pins">
+	  <% @pins.each_slice(3) do |row| %>
+		<div class="row">
+		  <% row.each do |pin| %>      
+			<div class="pin-container col-md-4">
+			  <div class="pin">
+				<div class="pin-header row">
+				  <div class="logo-thumbnail col-xs-3">
+						<% if pin.image? %>
+							<%= image_tag("#{pin.image.url(:thumb)}") %>
+						<% else %>
+							<%= image_tag("#{pin.category.name}-logo-thumbnail.png") %>
+						<% end %>
+				  </div>
+				  <div class+"col-xs-9">
+					  <h4>
+						<%= link_to "#{pin.title}", pin_by_name_path(slug: pin.slug) %>
+					  </h4>
+					  <%= link_to "#{pin.url}", pin.url, html_options = {target: "_blank"} %>
+				  </div>
+				</div>
+				<hr/>
+				<p class="text"><%= "#{pin.text}" %></p>
+				<p class="link"><%= link_to "Edit", edit_pin_path(pin) %></p>
+				<p class="link"><%= link_to "Delete", pin, method: :delete %></p>
+				<%= link_to repin_path(pin), class: "btn btn-default", method: "post" do %>
+					<i class="fa fa-thumb-tack"></i>
+					Repin!
+				<% end %>
+			  </div>
+			</div>
+		  <% end %>
+		</div>
+	  <% end %>
+	</div>
+<% end %>
+<hr/>

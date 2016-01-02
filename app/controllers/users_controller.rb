@@ -11,7 +11,8 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @user = User.find(params[:id])
+    @user = User.find(current_user.id)
+    @pins = Pin.joins(:pinnings).where(pinnings: {user_id: current_user.id}) 
   end
   
   def show_by_email
