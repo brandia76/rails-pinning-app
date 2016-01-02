@@ -19,4 +19,8 @@ class User < ActiveRecord::Base
     
     return nil
   end
+  
+  def full_name
+    "#{self.first_name} #{self.last_name}".strip
+  end
 end

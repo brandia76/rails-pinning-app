@@ -1,11 +1,13 @@
 class PinsController < ApplicationController
   before_action :require_login, except: [:show, :show_by_name]
+  
   def get_users
-    users = User.joins(:pinnings).where(pinnings: {pin_id: @pin_id})
+    users = User.joins(:pinnings).where(pinnings: {pin_id: @pin.id}).pluck(:first_name, :last_name).map { |names| names.join(" ")}
     if users.empty? 
       users = "No pinners yet"
+    else
+      users = users.join(", ")
     end
-    users
   end
   
   def index
@@ -19,7 +21,7 @@ class PinsController < ApplicationController
   def show_by_name
     @pin = Pin.find_by_slug(params[:slug])
     @users = get_users 
-    @creater = User.find(@pin.user_id).first_name
+    @creater = User.find(@pin.user_id).full_name
     render :show
   end
   
