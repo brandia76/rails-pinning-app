@@ -60,6 +60,7 @@ RSpec.describe UsersController, type: :controller do
     
     it "redirects to login if the user is not signed in" do
       user = User.create! valid_attributes
+      post :authenticate, {email: @user.email, password: @user.password}
       get :show, {:id => user.to_param}, valid_session
       expect(response).to redirect_to(:login)
     end
@@ -82,6 +83,7 @@ RSpec.describe UsersController, type: :controller do
     
     it "redirects to login if the user is not signed in" do
       user = User.create! valid_attributes
+      post :authenticate, {email: @user.email, password: @user.password}
       get :edit, {:id => user.to_param}, valid_session
       expect(response).to redirect_to(:login)
     end
@@ -128,6 +130,7 @@ RSpec.describe UsersController, type: :controller do
 
       it "updates the requested user" do
         user = User.create! valid_attributes
+        post :authenticate, {email: @user.email, password: @user.password}
         put :update, {:id => user.to_param, :user => new_attributes}, valid_session
         user.reload
 
@@ -149,7 +152,7 @@ RSpec.describe UsersController, type: :controller do
       
       it "redirects to login if the user is not signed in" do
         user = User.create! valid_attributes
-        get :update, {:id => user.to_param, :user => valid_attributes}, valid_session
+        get :update, {:id => @user.id, :user => valid_attributes}, valid_session
         expect(response).to redirect_to(:login)
       end
     end

@@ -34,6 +34,7 @@ class PinsController < ApplicationController
     @pin = Pin.create(pin_params)
     @pin.slug = @pin.title.downcase.gsub(" ", '-')
     @pin.user_id = current_user.id
+        print "########################### #{@pin.user_id}"
     if @pin.save
       redirect_to pin_by_name_path(@pin.slug)
     else
