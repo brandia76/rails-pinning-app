@@ -2,41 +2,4 @@
   <h1>Learning to Code</h1>
   <h3>A Collection of Ruby on Rails Resources for Beginners</h3>
 </div>
-<hr/>
-<div class="pins">
-  <% @pins.each_slice(3) do |row| %>
-    <div class="row">
-      <% row.each do |pin| %>      
-        <div class="pin-container col-md-4">
-          <div class="pin">
-            <div class="pin-header row">
-			  <div class="logo-thumbnail col-xs-3">
-					<% if pin.image? %>
-						<%= image_tag("#{pin.image.url(:thumb)}") %>
-					<% else %>
-						<%= image_tag("#{pin.category.name}-logo-thumbnail.png") %>
-					<% end %>
-			  </div>
-			  <div class+"col-xs-9">
-				  <h4>
-					<%= link_to "#{pin.title}", pin_by_name_path(slug: pin.slug) %>
-				  </h4>
-				  <%= link_to "#{pin.url}", pin.url, html_options = {target: "_blank"} %>
-			  </div>
-            </div>
-            <hr/>
-            <p class="text"><%= "#{pin.text}" %></p>
-			<p class="link"><%= link_to "Edit", edit_pin_path(pin) %></p>
-			<p class="link"><%= link_to "Delete", pin, method: :delete %></p>
-			<%= link_to repin_path(pin), class: "btn btn-default", method: "post" do %>
-				<i class="fa fa-thumb-tack"></i>
-				Repin!
-			<% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-  <% end %>
-</div>
-
-<hr/>
+<%= render partial: "shared/pins_list" %>

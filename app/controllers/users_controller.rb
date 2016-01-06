@@ -11,12 +11,11 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
-    @user = User.find(current_user.id)
     @pins = Pin.joins(:pinnings).where(pinnings: {user_id: current_user.id}) 
   end
   
   def show_by_email
-    @user = User.find_by_email(params[:email])
+    render :show
   end
   
   # GET /users/new
@@ -92,7 +91,7 @@ class UsersController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_user
-    @user = User.find(params[:id])
+    @user = User.find(current_user.id)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.

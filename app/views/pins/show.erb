@@ -20,10 +20,7 @@
   </p>
   <p>Created by <%= "#{@creater}" %></p>
   <p>Repinned by <%= "#{@users}" %></p>
-	<%= link_to repin_path(@pin), class: "btn btn-default", method: "post" do %>
-		<i class="fa-thumb-tack"></i>
-		Repin!
-	<% end %>
+	<%= render partial: "shared/repin_form", locals: {pin: @pin} %>
 </div>
 <br/>
 <a href="/">

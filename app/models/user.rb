@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
   
   has_many :pins, through: :pinnings
   has_many :pinnings, dependent: :destroy
+  has_many :boards
   
   #authenticate user
   def self.authenticate(email, password)

@@ -3,19 +3,37 @@
 <head>
   <title>Coder Pinterest</title>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
   <div class="container">
-	<% unless current_user.nil? %>
-		<div class="pull right">
-			<h3>Hi,
-				<%= link_to("#{current_user.first_name}", user_path(current_user)) %> | 
-				<%= link_to("Logout", logout_path(current_user), method: :delete) %>
-			</h3>
-		</div>
+	<% if logged_in? %>
+	
+			<div class="dropdown">
+				<button id="dropdownMenu1" class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+					<%= "#{current_user.first_name.upcase}" %> 
+					<span class="caret"></span>
+				</button>
+				
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+					<% current_user.boards.each do |board| %>
+						<li><%= link_to("#{board.name}", board_path(board.id)) %></li>
+					<% end %>
+					<li role="presentation" class="divider"></li>
+					<li><%= link_to("Home", root_path) %></li>
+					<li><%= link_to("Add a Pin", new_pin_path) %></li>
+					<li><%= link_to("Add a Board", new_board_path) %></li>
+					<li role="presentation" class="divider"></li>
+					<li><%= link_to("Edit My Info", edit_user_path(current_user.id)) %></li>
+					<li><%= link_to("Logout", logout_path(current_user), method: :delete) %></li>
+				</ul>
+			</div>
+			
+
 	<% end %>
     <%= yield %>
   </div>

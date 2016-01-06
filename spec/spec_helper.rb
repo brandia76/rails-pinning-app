@@ -30,3 +30,19 @@ def login(user)
     session[:user_id] = logged_in_user.id
   end
 end
+
+def logout(user)
+  if session[:user_id] == user.id
+    session.delete(:user_id)
+  end
+end
+
+module ApplicationHelper
+  def current_user
+    @user ||= User.where("id=?",session[:user_id]).first
+  end
+  
+  def logged_in?
+    !current_user.nil? && !current_user.id.nil?
+  end
+end

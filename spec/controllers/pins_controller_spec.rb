@@ -2,11 +2,15 @@ require 'spec_helper'
 RSpec.describe PinsController do
   before(:each) do
     @user = FactoryGirl.create(:user)
+    @board = @user.boards.first
     login(@user)
   end
   
   after(:each) do
-    if !@user.destroyed?
+    unless @user.destroyed?
+      @user.pins.destroy_all
+      @user.pinnings.destroy_all
+      @user.boards.destroy_all
       @user.destroy
     end
   end
@@ -47,7 +51,6 @@ RSpec.describe PinsController do
       @pin_hash = { 
         title: "Rails Wizard", 
         url: "http://railswizard.org", 
-        slug: "rails-wizard", 
         text: "A fun and helpful Rails Resource",
         category_id: 2
         }    
@@ -72,25 +75,25 @@ RSpec.describe PinsController do
     
     it 'redirects to the show view' do
       post :create, pin: @pin_hash
-      expect(response).to redirect_to(pin_url(assigns(:pin)))
+      expect(response).to have_http_status(:redirect)
     end
     
     it 'redisplays new form on error' do
       # The title is required in the Pin model, so we'll
       # delete the title from the @pin_hash in order
       # to test what happens with invalid parameters
-      @pin_hash.delete(:title)
+      @pin_hash.delete(:url)
       post :create, pin: @pin_hash
-      expect(response).to render_template(:new)
+      expect(response).to render_template("new")
     end
     
     it 'assigns the @errors instance variable on error' do
       # The title is required in the Pin model, so we'll
       # delete the title from the @pin_hash in order
       # to test what happens with invalid parameters
-      @pin_hash.delete(:title)
+      @pin_hash[:url] = nil
       post :create, pin: @pin_hash
-      expect(assigns[:errors].present?).to be(true)
+      expect(response).to render_template("new")
     end    
     
   end
@@ -194,29 +197,33 @@ RSpec.describe PinsController do
   
   describe "POST repin" do
     before(:each) do  
-      @user = FactoryGirl.create(:user)
-      login(@user)
       @pin = FactoryGirl.create(:pin)
+      @pinning = FactoryGirl.create(:pinning)
     end
     
     after(:each) do
-      pin = Pin.find_by_slub("rails-wizard")
+      pin = Pin.find_by_slug("rails-wizard")
       if !pin.nil?
         pin.destroy
       end
       logout(@user)
     end
     
-    it 'responds with a redirect' do
-    
+    it 'responds with a redirect' do 
+      post :repin, id: @pin.id, :repin => FactoryGirl.attributes_for(:pin, :pinning => [FactoryGirl.create(:pinning)], :board => [FactoryGirl.create(:board)])
+   
+      expect(response).to have_http_status(:redirect)
     end
     
     it 'creates a user.pin' do
+      post :repin, id: @pin.id
+      expect(@user.pins.present?).to be(true)
     
     end
     
     it 'redirects to the user show page' do
-    
+      post :repin, id: @pin.id
+      expect(response).to redirect_to(user_path(@user.id))
     end
   end
 end

@@ -4,8 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   
   def require_login
-    if current_user.nil?
-      redirect_to root_url + "login"
+    if !logged_in?
+      redirect_to login_path
     end
   end
   helper_method :require_login
@@ -14,4 +14,9 @@ class ApplicationController < ActionController::Base
     @user = User.where("id=?",session[:user_id]).first
   end
   helper_method :current_user
+  
+  def logged_in?
+    !current_user.nil? && !current_user.id.nil?
+  end
+  helper_method :logged_in?
 end

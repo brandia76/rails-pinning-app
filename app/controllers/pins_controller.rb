@@ -16,6 +16,7 @@ class PinsController < ApplicationController
   
   def show
     @pin = Pin.find(params[:id])
+    redirect_to pin_by_name_path(@pin.slug)
   end
   
   def show_by_name
@@ -31,9 +32,10 @@ class PinsController < ApplicationController
   
   def create
     @pin = Pin.create(pin_params)
+    @pin.slug = @pin.title.downcase.gsub(" ", '-')
     @pin.user_id = current_user.id
     if @pin.save
-      redirect_to pin_path(@pin)
+      redirect_to pin_by_name_path(@pin.slug)
     else
       @errors = @pin.errors.full_messages
       render :new
@@ -58,7 +60,7 @@ class PinsController < ApplicationController
   
   def repin
     @pin = Pin.find(params[:id])
-    @pin.pinnings.create(user: current_user)
+    @repin = @pin.pinnings.create(user: current_user, board_id: params[:pin][:pinning][:board_id])
     redirect_to user_path(current_user)
   end
   
@@ -69,7 +71,7 @@ class PinsController < ApplicationController
   
   private
   def pin_params
-    params.require(:pin).permit(:title, :url, :slug, :text, :category_id, :image)
+    params.require(:pin).permit(:title, :url, :text, :slug, :category_id, :image)
   end
   
 end
