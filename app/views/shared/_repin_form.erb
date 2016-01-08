@@ -4,8 +4,7 @@
 		<div class="form-group">
 		  <label>Repin to one of your boards?</label>
 		  <%= p.collection_select(:board_id, current_user.boards, :id, :name, {}, {class: "form-control:"}) %>
-		
-		<%= p.hidden_field :user_id, value: current_user.id %>
+
 	  <% end %>
 	  <%= f.button :submit, class: "btn btn-default pinterest-theme-button" do %>
 		<i class="fa fa-diamond"></i>

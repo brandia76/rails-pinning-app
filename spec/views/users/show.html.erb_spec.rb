@@ -8,7 +8,7 @@ RSpec.describe "users/show", type: :view do
 
   it "renders attributes in <p>" do
     render
-    @user.pins.each do |pin|
+    @pins.each do |pin|
       expect(rendered).to match(pin.title)
     end
   end

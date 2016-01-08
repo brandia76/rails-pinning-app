@@ -1,6 +1,7 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
+require 'factory_girl_rails'
 
 # no require of rails or active record, suppose this loads them
 require "bundler/setup"

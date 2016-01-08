@@ -4,6 +4,7 @@ FactoryGirl.define do
 		url "http://rails-cheat.com"
 		text "A great tool for beginning developers"
 		category Category.find_by_name("rails")
+    slug { title.downcase.gsub(" ", '-') }
 	end
 
   factory :user do 
@@ -15,7 +16,7 @@ FactoryGirl.define do
     after(:create) do |user|
       user.boards << FactoryGirl.create(:board)
       3.times do  
-        user.pinnings.create(pin: FactoryGirl.create(:pin), board: user.boards.first)
+        user.pinnings.create(pin: FactoryGirl.create(:pin, user_id: user.id), board: user.boards.first)
       end
     end
   end

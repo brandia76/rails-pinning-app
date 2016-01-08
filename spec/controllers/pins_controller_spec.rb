@@ -8,10 +8,10 @@ RSpec.describe PinsController do
   
   after(:each) do
     unless @user.destroyed?
-      @user.pins.destroy_all
-      @user.pinnings.destroy_all
-      @user.boards.destroy_all
-      @user.destroy
+      #@user.pins.destroy_all
+     # @user.pinnings.destroy_all
+      #@user.boards.destroy_all
+      #@user.destroy
     end
   end
   
@@ -199,6 +199,7 @@ RSpec.describe PinsController do
     before(:each) do  
       @pin = FactoryGirl.create(:pin)
       @pinning = FactoryGirl.create(:pinning)
+      @board = Board.find(@pinning.board_id)
     end
     
     after(:each) do
@@ -210,8 +211,7 @@ RSpec.describe PinsController do
     end
     
     it 'responds with a redirect' do 
-      post :repin, id: @pin.id, :repin => FactoryGirl.attributes_for(:pin, :pinning => [FactoryGirl.create(:pinning)], :board => [FactoryGirl.create(:board)])
-   
+      post :repin, id: @pin.id, pin: @pin, pinning: @pinning, board_id: @board.id
       expect(response).to have_http_status(:redirect)
     end
     

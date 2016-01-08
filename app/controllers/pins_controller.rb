@@ -34,7 +34,6 @@ class PinsController < ApplicationController
     @pin = Pin.create(pin_params)
     @pin.slug = @pin.title.downcase.gsub(" ", '-')
     @pin.user_id = current_user.id
-        print "########################### #{@pin.user_id}"
     if @pin.save
       redirect_to pin_by_name_path(@pin.slug)
     else
@@ -61,7 +60,8 @@ class PinsController < ApplicationController
   
   def repin
     @pin = Pin.find(params[:id])
-    @repin = @pin.pinnings.create(user: current_user, board_id: params[:pin][:pinning][:board_id])
+    @pin.pinnings.create(user_id: current_user.id, board_id: params[:pin][:pinning][:board_id])
+    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% #{params[:pin][:pinning][:board_id].class}"
     redirect_to user_path(current_user)
   end
   
