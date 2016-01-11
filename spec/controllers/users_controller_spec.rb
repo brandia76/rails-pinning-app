@@ -57,13 +57,6 @@ RSpec.describe UsersController, type: :controller do
       get :show, {:id => user.to_param}, valid_session
       expect(assigns(:user)).to eq(user)
     end
-    
-    it "redirects to login if the user is not signed in" do
-      user = User.create! valid_attributes
-      post :authenticate, {email: @user.email, password: @user.password}
-      get :show, {:id => user.to_param}, valid_session
-      expect(response).to redirect_to(:login)
-    end
   end
 
   describe "GET #new" do
@@ -81,10 +74,9 @@ RSpec.describe UsersController, type: :controller do
       expect(assigns(:user)).to eq(user)
     end
     
-    it "redirects to login if the user is not signed in" do
+    it "redirects to login if user is not signed in" do
       user = User.create! valid_attributes
-      post :authenticate, {email: @user.email, password: @user.password}
-      get :edit, {:id => user.to_param}, valid_session
+      get :show, {:id => user.to_param}, valid_session
       expect(response).to redirect_to(:login)
     end
   end
@@ -150,9 +142,9 @@ RSpec.describe UsersController, type: :controller do
         expect(response).to redirect_to(user)
       end
       
-      it "redirects to login if the user is not signed in" do
+      it "redirects to login if user is not signed in" do
         user = User.create! valid_attributes
-        get :update, {:id => @user.id, :user => valid_attributes}, valid_session
+        get :show, {:id => user.to_param}, valid_session
         expect(response).to redirect_to(:login)
       end
     end

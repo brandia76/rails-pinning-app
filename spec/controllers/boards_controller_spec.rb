@@ -8,9 +8,9 @@ RSpec.describe BoardsController do
   after(:each) do
     logout(@user)
     unless @user.destroyed?
-      @user.pins.destroy_all
       @user.pinnings.destroy_all
       @user.boards.destroy_all
+      Pin.where(user_id: @user.id).destroy_all
       @user.destroy
     end
   end
