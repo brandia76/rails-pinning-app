@@ -1,0 +1,43 @@
+
+<hr/>
+<% unless @boards.empty? %> 
+	<div class="boards">
+		<% @boards.each_slice(2) do |row| %>
+		<div class="row">
+			<% row.each do |board| %>
+				<div class="pin-container col-md-6">
+					<a href="<%= "#{board_by_user_and_name_path(@user.email, board.board_slug)}" %>" class="board_cell_link">
+					<div class="pin">
+						<h2 class="center"><%= board.name %></h2>
+						<hr/>
+						<div class="pin-header">
+						<% pinnings = Pinning.where(board_id: board.id) %>
+						<% pinnings.each do |pinning| %>
+							<div class="row">
+						  <% pins = Pin.where(id: pinning.pin_id) %>
+						  <% pins.each do |pin| %>
+
+								<div class="logo-thumbnail col-xs-12">
+								<p>
+								  <% if pin.image? %>
+									<%= image_tag("#{pin.image.url(:thumb)}") %>
+								  <% else %>
+									<%= image_tag("#{pin.category.name}-logo-thumbnail.png") %>
+								  <% end %>
+								  <%= pin.title %>
+								  </p>
+								</div>
+
+						  <% end %>
+						  </div>
+						<% end %>
+						</div>
+					</div>
+					</a>
+				</div>
+			<% end %>
+		</div>
+		<% end %>
+	</div>
+<% end %>
+<hr/>

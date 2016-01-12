@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <div class="header">
-  <h1><%= "#{@user.first_name}'s Pins" %></h1>
+	<% if @user == current_user %>
+		<h1>My Boards!</h1>
+	<% else %>
+		<h1><%= "#{@user.first_name}'s Boards" %></h1>
+	<% end %>
 </div>
-<%= render partial: "shared/pins_list" %>
+
+<%= render partial: "shared/boards_list" %>

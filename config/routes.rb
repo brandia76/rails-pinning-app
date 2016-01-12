@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
-  resources :boards
+  resources :followers
 
+  
+  
+  get 'signup' => "users#new", as: :signup
+  get 'login' => "users#login", as: :login
+  post '/login' => "users#authenticate"
+  get '/users' => "users#index"
+  delete 'logout/:id' => "users#logout", as: :logout
+  #get 'users/email-:email' => "users#show_by_email", as: 'user_by_email'
+  get ':email' => "users#show_by_email", as: 'user_by_email'
   resources :users, except: [:index]
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -8,24 +17,17 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'pins#index'
-  
-
   get 'pins/name-:slug' => "pins#show_by_name", as: 'pin_by_name'
-  
+  post 'pins/repin/:id' => "pins#repin", as: 'repin'
+  get '/library' => "pins#index"
   resources :pins
   
-  get '/library' => "pins#index"
+  get ':email/:board_slug' => "boards#show", as: 'board_by_user_and_name'
+  resources :boards
   
-  get 'signup' => "users#new", as: :signup
   
-  get '/login' => "users#login"
-  post '/login' => "users#authenticate"
+  #get 'users/:email' => "users#show_by_email", as: 'user_by_email'
   
-  get 'users/email-:email' => "users#show_by_email", as: 'user_by_email'
-  delete 'logout/:id' => "users#logout", as: :logout
-  
-  post 'pins/repin/:id' => "pins#repin", as: 'repin'
-  get '/users' => "users#index"
     
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

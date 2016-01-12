@@ -21,7 +21,7 @@
 				
 				<ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 					<% current_user.boards.each do |board| %>
-						<li><%= link_to("#{board.name}", board_path(board.id)) %></li>
+						<li><%= link_to("#{board.name}", board_by_user_and_name_path(current_user.email,board.board_slug)) %></li>
 					<% end %>
 					<li role="presentation" class="divider"></li>
 					<li><%= link_to("Home", root_path) %></li>

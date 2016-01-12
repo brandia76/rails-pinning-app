@@ -24,4 +24,12 @@ class User < ActiveRecord::Base
   def full_name
     "#{self.first_name} #{self.last_name}".strip
   end
+  
+  def followed
+    Follower.where("follower_id=?", self.id).map { |f| f.user }
+  end
+  
+  def not_followed
+    User.all - self.followed - [self]
+  end
 end

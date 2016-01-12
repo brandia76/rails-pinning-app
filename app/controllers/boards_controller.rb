@@ -11,13 +11,12 @@ class BoardsController < ApplicationController
   # GET /boards/1
   # GET /boards/1.json
   def show
-    get_user_boards
+    @pins = Pin.joins(:pinnings).where(pinnings: {board_id: @board.id}) 
   end
   
   def get_user_boards
-    @user = User.find(current_user.id)
-    @board = Board.find(params[:id])#Board.find_by_user_id(@user.id)
-    @pins = Pin.joins(:pinnings).where(pinnings: {board_id: @board.id}) 
+
+    
     #@pins = Pin.joins(:boards).where(boards: {user_id: current_user.id}) 
   end
   # GET /boards/new
@@ -72,7 +71,12 @@ class BoardsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_board
-      @board = Board.find(params[:id])
+      if params[:id].present?
+        @board = Board.find(params[:id])
+      else
+        @user = User.find_by_email(params[:email])
+        @board = Board.find_by_user_id_and_board_slug(@user.id, params[:board_slug])
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -2,11 +2,12 @@ class PinsController < ApplicationController
   before_action :require_login, except: [:show, :show_by_name]
   
   def get_users
-    users = User.joins(:pinnings).where(pinnings: {pin_id: @pin.id}).pluck(:first_name, :last_name).map { |names| names.join(" ")}
+    users = User.joins(:pinnings).where(pinnings: {pin_id: @pin.id})#.pluck(:first_name, :last_name).map { |names| names.join(" ")}
     if users.empty? 
-      users = "No pinners yet"
-    else
-      users = users.join(", ")
+         print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ #{users.count}"
+      users = ["No pinners yet"]
+    #else
+      #users = users.join(", ")
     end
   end
   
@@ -21,8 +22,8 @@ class PinsController < ApplicationController
   
   def show_by_name
     @pin = Pin.find_by_slug(params[:slug])
-    @users = get_users 
-    @creater = User.find(@pin.user_id).full_name
+    @users = users = User.joins(:pinnings).where(pinnings: {pin_id: @pin.id}) 
+    @creater = User.find(@pin.user_id)
     render :show
   end
   
@@ -60,8 +61,10 @@ class PinsController < ApplicationController
   
   def repin
     @pin = Pin.find(params[:id])
-    @pin.pinnings.create(user_id: current_user.id, board_id: params[:pin][:pinning][:board_id])
-    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% #{params[:pin][:pinning][:board_id].class}"
+    board = params[:pin][:pinning][:board_id]
+    unless Board.find_by_user_id_and_pin_id_and_board_id(current_user.id,@pin.id,board)
+      @pin.pinnings.create(user_id: current_user.id, board_id: board)
+    end
     redirect_to user_path(current_user)
   end
   
