@@ -11,13 +11,14 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @user = User.find(params[:id])
-    redirect_to user_by_email_path(@user.email)
+    redirect_to user_by_username_path(@user.username)
     
   end
   
-  def show_by_email
-    @user = User.find_by_email(params[:email])
-    @boards = Board.where(user_id: @user.id) 
+  def show_by_username
+    @user = User.find_by_username(params[:username])
+    @boards = Board.where(user_id: current_user.id) + Board.joins(:board_pinners).where(board_pinners: {user_id: current_user.id})
+ 
     render :show
   end
   
@@ -94,7 +95,7 @@ class UsersController < ApplicationController
   private
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password)
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :username)
   end
     
 end

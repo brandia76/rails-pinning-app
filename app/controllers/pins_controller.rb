@@ -4,7 +4,6 @@ class PinsController < ApplicationController
   def get_users
     users = User.joins(:pinnings).where(pinnings: {pin_id: @pin.id})#.pluck(:first_name, :last_name).map { |names| names.join(" ")}
     if users.empty? 
-         print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ #{users.count}"
       users = ["No pinners yet"]
     #else
       #users = users.join(", ")
@@ -62,7 +61,8 @@ class PinsController < ApplicationController
   def repin
     @pin = Pin.find(params[:id])
     board = params[:pin][:pinning][:board_id]
-    unless Board.find_by_user_id_and_pin_id_and_board_id(current_user.id,@pin.id,board)
+    #pinning = Board.find(current_user.id, @pin.id, board)
+    unless Pinning.find_by_user_id_and_pin_id_and_board_id(current_user.id, @pin.id, board)
       @pin.pinnings.create(user_id: current_user.id, board_id: board)
     end
     redirect_to user_path(current_user)
@@ -75,7 +75,7 @@ class PinsController < ApplicationController
   
   private
   def pin_params
-    params.require(:pin).permit(:title, :url, :text, :slug, :category_id, :image)
+    params.require(:pin).permit(:title, :url, :text, :slug, :category_id, :image, :user_id, pinnings_attributes: [:id, :user_id, :board_id])
   end
   
 end

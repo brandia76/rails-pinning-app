@@ -1,18 +1,12 @@
 require 'spec_helper'
 RSpec.describe BoardsController do
   before(:each) do  
-    @user = FactoryGirl.create(:user)
+    @user = FactoryGirl.create(:user_with_boards_and_followers)
     @board = @user.boards.first
     login(@user)
   end
   after(:each) do
     logout(@user)
-    unless @user.destroyed?
-      @user.pinnings.destroy_all
-      @user.boards.destroy_all
-      Pin.where(user_id: @user.id).destroy_all
-      @user.destroy
-    end
   end
   
   describe "GET new" do
@@ -34,25 +28,18 @@ RSpec.describe BoardsController do
     it 'reditrects tot he login page if the user is not logged in ' do
       logout(@user)
       get :new
-      #expect(response.redirect?).to be(true)
       expect(response).to redirect_to(:login)
     end
-  
   end
   
   describe "POST create" do
     before(:each) do
       @board_hash = {
-        name: "My Pins!"
+        name: "My Pins!",
+        board_slug: "my_pins!"
       }
     end
     
-    after(:each) do
-      board = Board.find_by_name("My Pins!")
-      unless board.nil?
-        board.destroy
-      end
-    end
     
     it 'responds with a redirect' do
       post :create, board: @board_hash
@@ -66,7 +53,8 @@ RSpec.describe BoardsController do
     
     it 'redirects to the show view' do
       post :create, board: @board_hash
-      expect(response.redirect?).to redirect_to(board_url(assigns(:board)))
+      
+      expect(response).to have_http_status(:redirect)
     end
     
     it 'redisplays new form on error' do
@@ -77,14 +65,84 @@ RSpec.describe BoardsController do
   end
   
   describe "GET #show" do
-    it 'assigns the requested board' do
-      get :show, id: @board.id
-      expect(assigns(:board) == @board).to eq(true)
-    end
     
     it 'assigned the @pins variable with the boards pins' do
-      get :show, id: @board.id
+      get :show, username: @user.username, board_slug: @board.board_slug
       expect(assigns(:pins) == @board.pins).to eq(true)
+    end
+  end
+  
+  describe "GET #edit" do
+    it 'responds successfully' do
+      get :edit, id: @board.id
+      expect(response.success?).to be(true)
+    end
+    
+    it 'renders the edit view' do
+      get :edit, id: @board.id
+      expect(response).to render_template("edit")
+    end
+    
+    it 'assigns an requested board as @board' do
+      get :edit, id: @board.id
+      expect(assigns[:board] == @board).to be(true)
+    end
+    
+    it 'redirects to the login page if user is not logged in' do
+      logout(@user)
+      get :edit, id: @board.id
+      expect(response).to redirect_to(:login)
+    end
+    
+    it 'sets @followers to the users\'s followers' do
+      get :edit, id: @board.id
+      expect(assigns[:followers] == @user.user_followers)
+    end
+  end
+  
+  describe "PUT #update" do
+    before(:each) do
+      @board_hash = {
+        name: @board.name,
+        board_slug: @board.board_slug
+      }
+    end
+    
+    it 'responds with a redirect' do
+      put :update, id: @board.id, board: @board_hash
+      expect(response).to have_http_status(:redirect)
+    end
+    
+    it 'redirects to the show view' do
+      put :update, id: @board.id, board: @board_hash
+      expect(response.body).to include(@board.board_slug)
+    end
+    
+    it 'redisplays edit for on error' do
+      @board_hash[:name] = ""
+      put :update, id: @board.id, board: @board_hash
+      expect(response).to render_template("edit")
+    end
+    
+    it 'assigns the @errors instance ariable on error' do
+      @board_hash[:name] = ""
+      put :update, id: @board.id, board: @board_hash
+      expect(assigns[:board].errors.any?).to be(true)
+    end
+    
+    it 'redirects to the login page if user is not logged in' do
+      logout(@user)
+      put :update, id: @board.id, board: @board_hash
+      expect(response).to redirect_to(:login)
+    end
+    
+    it 'creates a BoardPinning' do
+      user_to_let_pin = @user.followers.first
+      @board_hash[:board_pinners_attributes] = []
+      @board_hash[:board_pinners_attributes] << {user_id: user_to_let_pin.follower_id}
+      put :update, id: @board.id, board: @board_hash
+      board_pinner = BoardPinner.where("user_id = ? AND board_id = ?", user_to_let_pin.follower_id, @board.id)
+      expect(board_pinner.present?).to be(true)
     end
   end
 end

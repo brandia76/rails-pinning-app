@@ -20,6 +20,14 @@ RSpec.configure do |config|
     Rails.application.load_seed # loading seeds
   end
   
+  config.use_transactional_fixtures = false
+  config.before(:each) do 
+    DatabaseCleaner.start
+  end
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+  
   config.after(:suite) do
     FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
   end

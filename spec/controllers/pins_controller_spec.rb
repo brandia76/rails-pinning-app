@@ -1,20 +1,11 @@
 require 'spec_helper'
 RSpec.describe PinsController do
   before(:each) do
-    @user = FactoryGirl.create(:user)
+    @user = FactoryGirl.create(:user_with_boards)
     @board = @user.boards.first
     login(@user)
   end
-  
-  after(:each) do
-    unless @user.destroyed?
-      @user.pinnings.destroy_all
-      @user.boards.destroy_all
-      Pin.where(user_id: @user.id).destroy_all
-      @user.destroy
-    end
-  end
-  
+
   describe "GET index" do
   
     it 'renders the index template' do
@@ -200,23 +191,29 @@ RSpec.describe PinsController do
       @pin = FactoryGirl.create(:pin)
       @pinning = FactoryGirl.create(:pinning)
       @board = Board.find(@pinning.board_id)
+      @pin_hash = { 
+        title: @pin.title, 
+        url: @pin.url, 
+        slug: @pin.slug, 
+        text: @pin.text,
+        category_id: @pin.category_id,
+        user_id: @user.id
+        } 
     end
     
     after(:each) do
-      pin = Pin.find_by_slug("rails-wizard")
-      if !pin.nil?
-        pin.destroy
-      end
       logout(@user)
     end
     
     it 'responds with a redirect' do 
-      post :repin, id: @pin.id, pin: @pin, pinning: @pinning, board_id: @board.id
+      @pin_hash[:pinning_attributes] = []
+      @pin_hash[:pinning_attributes] << {id: @pin.id, user_id: @user.id, board_id: @board.id}
+      post :repin, id: @pin.id, board:  @pin_hash[:pinning_attributes]
       expect(response).to have_http_status(:redirect)
     end
     
     it 'creates a user.pin' do
-      post :repin, id: @pin.id
+      post :repin, id: @pin.id, pinning:  @pin_hash[:pinning_attributes]
       expect(@user.pins.present?).to be(true)
     
     end

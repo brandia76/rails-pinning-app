@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe "Our Application Routes" do
   before(:each) do
-    @user = FactoryGirl.create(:user)
+    @user = FactoryGirl.create(:user_with_boards)
     @pin = @user.pins.first
   end
   

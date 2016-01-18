@@ -1,11 +1,13 @@
 class User < ActiveRecord::Base
-  validates_presence_of :first_name, :last_name, :email, :password
-  validates_uniqueness_of :email
+  validates_presence_of :first_name, :last_name, :email, :password, :username
+  validates_uniqueness_of :email, :username
   has_secure_password
   
   has_many :pins, through: :pinnings
   has_many :pinnings, dependent: :destroy
-  has_many :boards
+  has_many :boards, dependent: :destroy
+  has_many :followers, dependent: :destroy
+  has_many :board_pinners
   
   #authenticate user
   def self.authenticate(email, password)
@@ -21,8 +23,17 @@ class User < ActiveRecord::Base
     return nil
   end
   
+  def user_followers
+    #self.followers.map{ |f| User.find(f.follower_id) }
+    Follower.where("user_id=?", self.id).map{ |f| User.find(f.follower_id) }
+  end
+  
+  def pinnable_boards
+    self.boards + self.board_pinners.map{ |bp| bp.board }
+  end
+  
   def full_name
-    "#{self.first_name} #{self.last_name}".strip
+    first_name + " " + last_name
   end
   
   def followed

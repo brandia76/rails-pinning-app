@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  resources :followers
+  resources :followers, only: [:index, :new, :destroy, :create]
 
-  
+  resources :boards 
   
   get 'signup' => "users#new", as: :signup
   get 'login' => "users#login", as: :login
@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   get '/users' => "users#index"
   delete 'logout/:id' => "users#logout", as: :logout
   #get 'users/email-:email' => "users#show_by_email", as: 'user_by_email'
-  get ':email' => "users#show_by_email", as: 'user_by_email'
+  get ':username' => "users#show_by_username", as: 'user_by_username'
   resources :users, except: [:index]
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -22,11 +22,10 @@ Rails.application.routes.draw do
   get '/library' => "pins#index"
   resources :pins
   
-  get ':email/:board_slug' => "boards#show", as: 'board_by_user_and_name'
-  resources :boards
   
+  get ':username/:board_slug' => "boards#show", as: 'board_by_user_and_name'
+
   
-  #get 'users/:email' => "users#show_by_email", as: 'user_by_email'
   
     
   # Example of regular route:

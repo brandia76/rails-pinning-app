@@ -1,3 +1,24 @@
 <p id="notice"><%= notice %></p>
-<h1><%= "#{@board.name}" %></h1>
+<div class="row">
+	<div class="col-md-8">
+		<h1><%= "#{@board.name}" %></h1>
+	</div>
+	<div class="col-md-4">
+		<% if @board.user_id == current_user.id %>
+			<%= link_to raw("<i class=\"fa fa-pencil\"></i>Edit Board"), edit_board_path(id: @board.id), class: "btn btn-success" %>
+		<% end %>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-2">
+		<h4>Board Collaborators:<h4>
+	</div>
+	<div class="col-md-8">
+		<h4>
+			<% @collaborators.each do |collaborator| %>
+				<%= link_to("#{collaborator.full_name}  ", user_by_username_path(collaborator.username)) %>
+			<% end %>
+		</h4>
+	</div>
+</div>
 <%= render partial: "shared/pins_list" %>

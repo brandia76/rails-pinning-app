@@ -11,13 +11,26 @@
     </div>
   <% end %>
 
-  <%= f.hidden_field :user_id, value: user_to_follow.id %>
-  <%= f.hidden_field :follower_id, value: current_user.id %>
-  
-  <%= link_to("#{user_to_follow.full_name}", user_by_email_path(email: user_to_follow.email) ) %>
-  <%= f.button :submit, class: "btn btn-default pinterest-theme-button" do %>
-	<i class="fa fa-users"></i>
-		Follow!
-  <% end %>
+<div class="row follower_row">
+	<div class="col-md-4">
+		  <%= f.hidden_field :user_id, value: user_to_follow.id %>
+		  <%= f.hidden_field :follower_id, value: current_user.id %>
+		  
+		<p class="follower_link">
+			<%= link_to("#{user_to_follow.full_name}", user_by_username_path(username: user_to_follow.username) ) %>
+		</p>
+	</div>
+	<div class="col-md-4">
+		<% Board.where(user_id: user_to_follow.id).each do |board| %>
+			<%= link_to("#{board.name}", board_by_user_and_name_path(user_to_follow.username, board.board_slug), class: "follower_board") %>
+		<% end %>
+	</div>
+	<div class="col-md-4">
+		  <%= f.button :submit, class: "btn btn-default follower_btn pinterest-theme-button" do %>
+			<i class="fa fa-users"></i>
+				Follow!
+		  <% end %>
+	</div>
+</div>
   
 <% end %>

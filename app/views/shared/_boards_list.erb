@@ -1,14 +1,23 @@
 
 <hr/>
-<% unless @boards.empty? %> 
+<% unless @boards.nil? %> 
 	<div class="boards">
 		<% @boards.each_slice(2) do |row| %>
 		<div class="row">
 			<% row.each do |board| %>
+				<% owner = User.find(board.user_id) %>
 				<div class="pin-container col-md-6">
-					<a href="<%= "#{board_by_user_and_name_path(@user.email, board.board_slug)}" %>" class="board_cell_link">
+					<a href="<%= "#{board_by_user_and_name_path(owner.username, board.board_slug)}" %>" class="board_cell_link">
 					<div class="pin">
-						<h2 class="center"><%= board.name %></h2>
+						<div class="row">
+						<h2 class="center">
+							<% if board.user_id == current_user.id %>
+								<%= board.name %>
+							<% else %>
+								<%=  owner.first_name.titlecase + "'s " + board.name %>
+							<% end %>
+						</h2>
+						</div>
 						<hr/>
 						<div class="pin-header">
 						<% pinnings = Pinning.where(board_id: board.id) %>

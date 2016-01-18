@@ -15,7 +15,7 @@
     <% @followers.each do |follower| %>
       <tr>
 
-        <td><%= link_to("#{follower.full_name}", user_by_email_path(email: follower.email) ) %></td>
+        <td><%= link_to("#{follower.full_name}", user_by_username_path(username: follower.username) ) %></td>
         <td><%= link_to 'Unfollow', follower, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

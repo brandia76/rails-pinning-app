@@ -2,9 +2,8 @@
 	<%= form_for(pin, url: repin_path(pin), method: "post", html: {class: "form-horizonal"}) do |f| %>
 	  <%= f.fields_for :pinning do |p| %>
 		<div class="form-group">
-		  <label>Repin to one of your boards?</label>
-		  <%= p.collection_select(:board_id, current_user.boards, :id, :name, {}, {class: "form-control:"}) %>
-
+		  <label>Add to a board?</label>
+		  <%= p.collection_select(:board_id, current_user.pinnable_boards, :id, :name, {}, {class: "form-control:"}) %>
 	  <% end %>
 	  <%= f.button :submit, class: "btn btn-default pinterest-theme-button" do %>
 		<i class="fa fa-diamond"></i>
