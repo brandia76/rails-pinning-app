@@ -36,6 +36,7 @@ class UsersController < ApplicationController
   # GET /users/login
   def authenticate
     @user = User.authenticate(params[:email], params[:password])
+    print "%%%%%%%%%%%%%%% Logging user in"
     if @user.nil?
       @errors = ["Invalid email or password"] #@user.errors.full_messages 
       render :login
@@ -58,8 +59,10 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
+        @new_user = User.last
+        session[:user_id] = @new_user.id
+        format.html { redirect_to user_path(@user.id), notice: 'User was successfully created.' }
+        format.json { render :show, status: :created, location: user_path(@user.id) }
       else
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }

@@ -33,8 +33,9 @@
 					<li><%= link_to("Logout", logout_path(current_user), method: :delete) %></li>
 				</ul>
 			</div>
-			
-
+	<% else %>		
+		<%= link_to "<button class=\"btn btn-default btn-top-page\">Create Account</button>".html_safe, new_user_path, id: "signUp", class: "btn btn-default btn-top-page" %>
+		<%= link_to "<button class=\"btn btn-default btn-top-page\">Sign In!</button>".html_safe, login_path, id: "logIn", class: "btn btn-default btn-top-page" %>
 	<% end %>
     <%= yield %>
   </div>

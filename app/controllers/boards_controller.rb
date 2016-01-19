@@ -23,7 +23,8 @@ class BoardsController < ApplicationController
 
   # GET /boards/1/edit
   def edit
-    @followers = current_user.user_followers
+    #@followers = current_user.user_followers
+    @followers = current_user.followed
   end
 
   # POST /boards
