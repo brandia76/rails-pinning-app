@@ -29,6 +29,7 @@
 					<li><%= link_to("Add a Board", new_board_path) %></li>
 					<li role="presentation" class="divider"></li>
 					<li><%= link_to("Edit My Info", edit_user_path(current_user.id)) %></li>
+					<li><%= link_to("My Followers", followers_path) %></li>
 					<li><%= link_to("Logout", logout_path(current_user), method: :delete) %></li>
 				</ul>
 			</div>
