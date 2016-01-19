@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :require_login, only: [:show, :edit, :update, :destroy]
+  before_action :require_login, only: [:show, :edit, :update, :destroy, :show_by_username, :index]
 
   # GET /users
   # GET /users.json
@@ -12,12 +12,11 @@ class UsersController < ApplicationController
   def show
     @user = User.find(params[:id])
     redirect_to user_by_username_path(@user.username)
-    
   end
   
   def show_by_username
     @user = User.find_by_username(params[:username])
-    @boards = Board.where(user_id: current_user.id) + Board.joins(:board_pinners).where(board_pinners: {user_id: current_user.id})
+    @boards = Board.where(user_id: @user.id) + Board.joins(:board_pinners).where(board_pinners: {user_id: @user.id})
  
     render :show
   end

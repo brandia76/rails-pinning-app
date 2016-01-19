@@ -23,9 +23,15 @@
 				</div>
 				<hr/>
 				<p class="text"><%= "#{pin.text}" %></p>
-				<p class="link"><%= link_to "Edit", edit_pin_path(pin) %></p>
-				<p class="link"><%= link_to "Delete", pin, method: :delete %></p>
-				<%= render partial: "shared/repin_form", locals: {pin: pin} %>
+				<% if current_user.present? && pin.user_id == current_user.id %>
+					<p class="link"><%= link_to "Edit", edit_pin_path(pin) %></p>
+					<p class="link"><%= link_to "Delete", pin, method: :delete %></p>
+				<% end %>
+				<% if current_user.present? %>
+					<%= render partial: "shared/repin_form", locals: {pin: pin} %>
+				<% else %>
+					<h3><%= link_to "Please login to pin this", login_path %>
+				<% end %>
 			  </div>
 			</div>
 		  <% end %>

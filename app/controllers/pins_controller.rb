@@ -1,5 +1,5 @@
 class PinsController < ApplicationController
-  before_action :require_login, except: [:show, :show_by_name]
+  before_action :require_login, except: [:index, :show, :show_by_name]
   
   def get_users
     users = User.joins(:pinnings).where(pinnings: {pin_id: @pin.id})#.pluck(:first_name, :last_name).map { |names| names.join(" ")}
